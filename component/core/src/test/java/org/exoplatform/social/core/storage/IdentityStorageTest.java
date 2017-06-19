@@ -55,7 +55,7 @@ public class IdentityStorageTest extends AbstractCoreTest {
   public void setUp() throws Exception {
     super.setUp();
     identityStorage = (IdentityStorage) getContainer().getComponentInstanceOfType(IdentityStorageImpl.class);
-    spaceStorage = (SpaceStorage) getContainer().getComponentInstanceOfType(SpaceStorageImpl.class);
+    spaceStorage = (SpaceStorage) getContainer().getComponentInstanceOfType(SpaceStorage.class);
     lifecycle = lifecycleLookup();
     assertNotNull("identityStorage must not be null", identityStorage);
     tearDownIdentityList = new ArrayList<Identity>();
@@ -662,7 +662,7 @@ public class IdentityStorageTest extends AbstractCoreTest {
     assertEquals(numberUser - numberDisableUser, identityStorage.getIdentitiesCount(OrganizationIdentityProvider.NAME));
   }
 
-  @MaxQueryNumber(2635)
+  @MaxQueryNumber(3165)
   public void testGetSpaceMemberByProfileFilter() throws Exception {
     populateData();
     populateUser("username4");
@@ -688,6 +688,7 @@ public class IdentityStorageTest extends AbstractCoreTest {
     space.setMembers(members);
 
     spaceStorage.saveSpace(space, true);
+    StorageUtils.persist();
     tearDownSpaceList.add(space);
     
     ProfileFilter profileFilter = new ProfileFilter();

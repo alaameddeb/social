@@ -603,7 +603,7 @@ public class SpaceServiceImpl implements SpaceService {
    */
   public void removeMember(Space space, String userId) {
     Identity spaceIdentity = identityStorage.findIdentity(SpaceIdentityProvider.NAME, space.getPrettyName());
-    if (spaceIdentity.isDeleted()) {
+    if (spaceIdentity != null && spaceIdentity.isDeleted()) {
       return;
     }
     String[] members = space.getMembers();
@@ -740,8 +740,7 @@ public class SpaceServiceImpl implements SpaceService {
    * {@inheritDoc}
    */
   public boolean isMember(Space space, String userId) {
-    if (ArrayUtils.contains(space.getMembers(), userId)) return true;
-    return SpaceUtils.isUserHasMembershipTypesInGroup(userId, space.getGroupId(), MembershipTypeHandler.ANY_MEMBERSHIP_TYPE);
+    return ArrayUtils.contains(space.getMembers(), userId);
   }
 
   /**
@@ -1374,10 +1373,7 @@ public class SpaceServiceImpl implements SpaceService {
    * {@inheritDoc}
    */
   public boolean hasSettingPermission(Space space, String userId) {
-    if (userId.equals(getUserACL().getSuperUser()) || ArrayUtils.contains(space.getManagers(), userId)) {
-      return true;
-    }
-    return SpaceUtils.isUserHasMembershipTypesInGroup(userId, space.getGroupId(), MembershipTypeHandler.ANY_MEMBERSHIP_TYPE);
+    return userId.equals(getUserACL().getSuperUser()) || ArrayUtils.contains(space.getManagers(), userId);
   }
 
   /**
@@ -1391,8 +1387,7 @@ public class SpaceServiceImpl implements SpaceService {
    * {@inheritDoc}
    */
   public boolean isManager(Space space, String userId) {
-    if (ArrayUtils.contains(space.getManagers(), userId)) return true;
-    return SpaceUtils.isUserHasMembershipTypesInGroup(userId, space.getGroupId(), MembershipTypeHandler.ANY_MEMBERSHIP_TYPE);
+    return ArrayUtils.contains(space.getManagers(), userId);
   }
 
   /**

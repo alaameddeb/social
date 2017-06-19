@@ -321,7 +321,6 @@ public class UISpaceMember extends UIContainer {
     
     int currentPage = iteratorExistingUsers.getCurrentPage();
     Set<String> users = new HashSet<String>(Arrays.asList(memberUsers));
-    users.addAll(SpaceUtils.findMembershipUsersByGroupAndTypes(space.getGroupId(), MembershipTypeHandler.ANY_MEMBERSHIP_TYPE));
     
     LazyPageList<String> pageList = new LazyPageList<String>(new StringListAccess(new ArrayList<String>(users)), MEMBERS_PER_PAGE);
     iteratorExistingUsers.setPageList(pageList);

@@ -655,15 +655,6 @@ public class RDBMSIdentityStorageImpl extends IdentityStorageImpl {
             break;
           case MANAGER:
             members = gotSpace.getManagerMembersId();
-            List<String> wildcardUsers = SpaceUtils.findMembershipUsersByGroupAndTypes(space
-                    .getGroupId(), MembershipTypeHandler.ANY_MEMBERSHIP_TYPE);
-
-            for (String remoteId : wildcardUsers) {
-              Identity id = findIdentity(OrganizationIdentityProvider.NAME, remoteId);
-              if (id != null) {
-                relations.add(EntityConverterUtils.parseId(id.getId()));
-              }
-            }
             break;
         }
 
