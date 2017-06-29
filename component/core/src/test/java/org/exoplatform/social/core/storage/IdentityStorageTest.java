@@ -837,23 +837,5 @@ public class IdentityStorageTest extends AbstractCoreTest {
     }
     return user;
   }
-  
-  private static void addUserToGroupWithMembership(String remoteId, String groupId, String membership) {
-    OrganizationService organizationService = SpaceUtils.getOrganizationService();
-    try {
-      // TODO: checks whether user is already manager?
-      MembershipHandler membershipHandler = organizationService.getMembershipHandler();
-      Membership found = membershipHandler.findMembershipByUserGroupAndType(remoteId, groupId, membership);
-      if (found != null) {
-        return;
-      }
-      User user = organizationService.getUserHandler().findUserByName(remoteId);
-      MembershipType membershipType = organizationService.getMembershipTypeHandler().findMembershipType(membership);
-      GroupHandler groupHandler = organizationService.getGroupHandler();
-      Group existingGroup = groupHandler.findGroupById(groupId);
-      membershipHandler.linkMembership(user, existingGroup, membershipType, true);
-    } catch (Exception e) {
-      return;
-    }
-  }
+
 }
