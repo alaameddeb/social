@@ -77,7 +77,7 @@ public class AnyMembershipMigration implements CustomTaskChange {
                   }
                 } catch (Exception e) {
                   error++;
-                  LOG.error(e);
+                  LOG.error("error during migrate membership " + m.getId(), e);
                 }
               }
             }
@@ -92,12 +92,12 @@ public class AnyMembershipMigration implements CustomTaskChange {
         }
       }
     } catch (Exception ex) {
-      LOG.error(ex);
+      LOG.error("error during migrate memberships", ex);
       throw new CustomChangeException(ex);
     } finally {
       RequestLifeCycle.end();
 
-      LOG.info("=== End Social Membership * migration {} success {} error in {} miliseconds",
+      LOG.info("=== End Social Membership * {} memberships migrated successfully, {} errors, in {} miliseconds",
           count, error, System.currentTimeMillis() - startTime);
     }
   }
