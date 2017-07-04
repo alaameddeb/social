@@ -49,7 +49,6 @@ import org.exoplatform.social.core.storage.impl.StorageUtils;
 import org.exoplatform.social.core.storage.query.JCRProperties;
 import org.apache.commons.lang.StringUtils;
 
-
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PropertyIterator;
@@ -218,7 +217,11 @@ public class ActivityMigrationService extends AbstractMigrationService<ExoSocial
             IdentityEntity spaceEntity = _findById(IdentityEntity.class, node.getUUID());
             LOG.info(String.format("|  \\ START::space number: %s/%s (%s space)", offset, totalSpaces, owner.getRemoteId()));
             try {
-              migrationByIdentity(null, spaceEntity);
+              if (!(spaceEntity.isDeleted())) {
+                migrationByIdentity(null, spaceEntity);
+              } else {
+                LOG.info(String.format("No need to migrate the activities of the deleted space %s", owner.getRemoteId()));
+              }
             } catch (Exception ex) {
               numberSpaceFailed++;
               identitiesMigrateFailed.add(node.getName());
@@ -290,6 +293,10 @@ public class ActivityMigrationService extends AbstractMigrationService<ExoSocial
     }
 
     Identity jpaIdentity = identityJPAStorage.findIdentity(identityEntity.getProviderId(), identityEntity.getRemoteId());
+    if(jpaIdentity == null) {
+      LOG.warn("The identity of the user " + identityEntity.getRemoteId() + " was not found in migrated identities. Do not migrate activities for this user.");
+      return;
+    }
 
     String type = (OrganizationIdentityProvider.NAME.equals(providerId)) ? "user" : "space";
     LOG.info(String.format("    Migration activities for %s: %s", type, identityEntity.getRemoteId()));
@@ -312,6 +319,10 @@ public class ActivityMigrationService extends AbstractMigrationService<ExoSocial
         }
 
         ExoSocialActivity activity = activityJCRStorage.getActivity(activityId);
+        if(activity == null) {
+          LOG.info("Activity with ID=" + activityId + " could not be found, ignoring it!");
+          continue;
+        }
         Map<String, String> params = activity.getTemplateParams();
 
         if (params != null && !params.isEmpty()) {
