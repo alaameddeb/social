@@ -402,16 +402,8 @@
         var windowH = $(window).height();
         //
         container.height('');
-        var topH = 0;
-        var top = $('#NavigationPortlet');
-        if(top.length > 0) {
-          topH = top.height();
-        }
-        var wH = windowH - topH;
+        var wH = windowH - 44;
         var tdLeftNavi = $('.LeftNavigationTDContainer:first').css('height', wH);
-        if(tdLeftNavi.find('div:first').height()  > wH) {
-          tdLeftNavi.height('');
-        }
         //
         var parent = container.parents('td.RightBodyTDContainer:first').css('position', 'relative');
         parent.append($('<div class="max-width-fake" style="bottom:0px; width:1px; position:absolute"></div>'));
