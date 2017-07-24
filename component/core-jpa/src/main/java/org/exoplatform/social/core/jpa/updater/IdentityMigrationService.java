@@ -159,7 +159,7 @@ public class IdentityMigrationService extends AbstractMigrationService<Identity>
               try {
                 Identity identity = migrateIdentity(identityNode, jcrid);
 
-                if (identity != null) {
+                if (identity != null && !identity.isDeleted()) {
                   String newId = identity.getId();
                   identity.setId(jcrid);
                   broadcastListener(identity, newId);

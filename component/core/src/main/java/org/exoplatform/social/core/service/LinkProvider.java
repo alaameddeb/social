@@ -97,7 +97,7 @@ public class LinkProvider {
     SpaceService spaceService = CommonsUtils.getService(SpaceService.class);
     Space space = spaceService.getSpaceByPrettyName(prettyName);
     RequestContext ctx = RequestContext.getCurrentInstance();
-    if (ctx != null) {
+    if (ctx != null && space !=null) {
       NodeURL nodeURL = ctx.createURL(NodeURL.TYPE);
       NavigationResource resource = new NavigationResource(SiteType.GROUP, space.getGroupId(), space.getUrl());
       return nodeURL.setResource(resource).toString();
